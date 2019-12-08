@@ -48,6 +48,31 @@ namespace AVLTree
             return new FindResult(node, isLess ? ChildDirection.Left : ChildDirection.Right);
         }
 
+        public static bool TryFind(this TreeNode root, int key, out TreeNode foundNode)
+        {
+
+            var node = root;
+            var nextNode = GetNextNode(node, key);
+            while (nextNode != null && node.Key != key)
+            {
+                node = nextNode;
+                nextNode = GetNextNode(node, key);
+            }
+            if (node.Key == key)
+            {
+                foundNode = node;
+                return true;
+            }
+            foundNode = null;
+            return false;
+        }
+
+        private static TreeNode GetNextNode(TreeNode node, int key)
+        {
+            var isLess = key < node.Key;
+            return isLess ? node.Left : node.Right;
+        }
+
         private static void InsertInPlace(this TreeNode node, TreeNode newNode)
         {
             var findResult = node.FindParent(newNode);

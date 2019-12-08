@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -33,6 +34,37 @@ namespace AVLTree.UnitTests
             }
         }
 
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(100)]
+        [InlineData(1000)]
+        [InlineData(10000)]
+        public void BinaryFindMethodTest(int count)
+        {
+            var keys = Enumerable.Range(1, count).ToArray();
+            if (keys.Any())
+            {
+                var root = keys.CreateTreeRotated();
+                var answers = Enumerable.Range(0, count + 2)
+                    .Select(x =>
+                    {
+                        var contains = root.TryFind(x, out TreeNode foundNode);
+                        return new {contains, foundNode, key = x};
+                    })
+                    .ToArray();
+
+                var expected = Enumerable.Repeat(false, 1)
+                    .Concat(Enumerable.Range(1, count).Select(_ => true))
+                    .Concat(Enumerable.Repeat(false, 1))
+                    .ToArray();
+
+
+                Assert.All(answers, x => Assert.True(x.contains ? x.foundNode.Key == x.key : x.foundNode == null));
+                Assert.Equal(expected, answers.Select(x => x.contains));
+            }
+        }
 
 
         [Theory]
