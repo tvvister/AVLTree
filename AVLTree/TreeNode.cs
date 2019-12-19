@@ -8,12 +8,13 @@ namespace AVLTree
         public TreeNode Left = null;
         public TreeNode Right = null;
         public TreeNode Parent = null;
-        public readonly int Key;
+        public int Key;
         internal int Height;
-
+        internal long ComposeValue;
         public TreeNode(int key)
         {
             Key = key;
+            ComposeValue = key;
         }
     }
 }
